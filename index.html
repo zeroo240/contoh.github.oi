@@ -1,14 +1,146 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My First Website</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Will You Be My Girlfriend?</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: pink;
+      overflow: hidden;
+      cursor: url('https://cdn-icons-png.flaticon.com/512/833/833472.png'), auto;
+    }
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: red;
+      transform: rotate(45deg);
+      animation: float 3s ease-out forwards;
+    }
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: red;
+      border-radius: 50%;
+    }
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+    .heart::after {
+      left: -10px;
+      top: 0;
+    }
+    @keyframes float {
+      to {
+        transform: translateY(-100vh) scale(0.5);
+        opacity: 0;
+      }
+    }
+    .container {
+      text-align: center;
+      padding-top: 100px;
+    }
+    button {
+      padding: 15px 25px;
+      font-size: 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+    .yes {
+      background: hotpink;
+      color: white;
+    }
+    .no {
+      position: absolute;
+      background: lightgray;
+      color: black;
+    }
+    .hidden {
+      display: none;
+    }
+    .page {
+      display: none;
+    }
+    .active {
+      display: block;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      margin: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+  </style>
 </head>
 <body>
-    <h1>Welcome to My Website!</h1>
-    <p>This is my first website hosted on GitHub Pages.</p>
-    <script src="script.js"></script>
-</body>
+  <div id="page1" class="page active container">
+    <h1>Will you be my girlfriend?</h1>
+    <button class="yes" onclick="nextPage()">Yes I do</button>
+    <button class="no" id="noButton">No, leave me alone</button>
+  </div>  <div id="page2" class="page container">
+    <h1>Let's plan our first date!</h1>
+    <p>Date: <input type="date" id="date"></p>
+    <p>Time: <input type="time" id="time"></p>
+    <p>Choose an activity:</p>
+    <label><input type="radio" name="activity" value="Pizza"> Pizza</label>
+    <label><input type="radio" name="activity" value="London"> London</label>
+    <label><input type="radio" name="activity" value="Movie"> Movie</label>
+    <br><br>
+    <button onclick="nextPageWithData()">Continue</button>
+  </div>  <div id="page3" class="page container">
+    <h1>Our Date Plan</h1>
+    <div class="card" id="summary"></div>
+  </div>  <script>
+    const pages = ["page1", "page2", "page3"];
+    let data = {};
+
+    function showPage(id) {
+      pages.forEach(page => document.getElementById(page).classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+    }
+
+    function nextPage() {
+      showPage("page2");
+    }
+
+    function nextPageWithData() {
+      data.date = document.getElementById("date").value;
+      data.time = document.getElementById("time").value;
+      const activities = document.getElementsByName("activity");
+      for (let a of activities) if (a.checked) data.activity = a.value;
+      document.getElementById("summary").innerHTML = `
+        <h2>Date: ${data.date}</h2>
+        <h2>Time: ${data.time}</h2>
+        <h2>Activity: ${data.activity}</h2>
+      `;
+      showPage("page3");
+    }
+
+    const noButton = document.getElementById("noButton");
+    noButton.addEventListener("mouseover", () => {
+      const x = Math.random() * (window.innerWidth - 100);
+      const y = Math.random() * (window.innerHeight - 50);
+      noButton.style.left = `${x}px`;
+      noButton.style.top = `${y}px`;
+    });
+
+    document.addEventListener("mousemove", e => {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.style.left = `${e.clientX}px`;
+      heart.style.top = `${e.clientY}px`;
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 3000);
+    });
+  </script></body>
 </html>
